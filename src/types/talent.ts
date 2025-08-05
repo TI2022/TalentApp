@@ -1,13 +1,10 @@
 export interface TalentItem {
   id: number;
-  category: string;
   shortcoming: string;
   talent: string;
   strength: string;
   checked: boolean;
   checkedAt?: Date;
-  priority?: 1 | 2 | 3;
-  tags?: string[];
 }
 
 export interface AppSettings {
@@ -28,7 +25,5 @@ export interface UserProfile {
 export interface FilterOptions {
   showChecked: boolean;
   showUnchecked: boolean;
-  category?: string;
-  priority?: 1 | 2 | 3;
   searchQuery?: string;
 }

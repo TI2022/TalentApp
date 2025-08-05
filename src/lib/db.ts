@@ -10,7 +10,7 @@ export class TalentDatabase extends Dexie {
   constructor() {
     super('TalentAppDB');
     this.version(1).stores({
-      talents: '++id, category, checked, priority, checkedAt',
+      talents: '++id, checked, checkedAt',
       settings: 'key',
       profile: 'id'
     });
@@ -68,8 +68,6 @@ export const talentService = {
   async getFilteredTalents(filters: {
     showChecked?: boolean;
     showUnchecked?: boolean;
-    category?: string;
-    priority?: number;
     searchQuery?: string;
   }): Promise<TalentItem[]> {
     let query = db.talents.orderBy('id');
@@ -79,8 +77,6 @@ export const talentService = {
     return results.filter(talent => {
       if (filters.showChecked === false && talent.checked) return false;
       if (filters.showUnchecked === false && !talent.checked) return false;
-      if (filters.category && talent.category !== filters.category) return false;
-      if (filters.priority && talent.priority !== filters.priority) return false;
       if (filters.searchQuery) {
         const query = filters.searchQuery.toLowerCase();
         return (
@@ -97,28 +93,15 @@ export const talentService = {
     total: number;
     checked: number;
     completionRate: number;
-    byCategory: Record<string, { total: number; checked: number }>;
   }> {
     const talents = await db.talents.toArray();
     const total = talents.length;
     const checked = talents.filter(t => t.checked).length;
-    
-    const byCategory: Record<string, { total: number; checked: number }> = {};
-    talents.forEach(talent => {
-      if (!byCategory[talent.category]) {
-        byCategory[talent.category] = { total: 0, checked: 0 };
-      }
-      byCategory[talent.category].total++;
-      if (talent.checked) {
-        byCategory[talent.category].checked++;
-      }
-    });
 
     return {
       total,
       checked,
-      completionRate: total > 0 ? Math.round((checked / total) * 100) : 0,
-      byCategory
+      completionRate: total > 0 ? Math.round((checked / total) * 100) : 0
     };
   }
 };

@@ -12,7 +12,6 @@ interface TalentContextType {
     total: number;
     checked: number;
     completionRate: number;
-    byCategory: Record<string, { total: number; checked: number }>;
   };
   filters: FilterOptions;
   toggleTalent: (id: number) => Promise<void>;
@@ -34,23 +33,11 @@ export function TalentProvider({ children }: { children: ReactNode }) {
   const stats = React.useMemo(() => {
     const total = talents.length;
     const checked = talents.filter(t => t.checked).length;
-    
-    const byCategory: Record<string, { total: number; checked: number }> = {};
-    talents.forEach(talent => {
-      if (!byCategory[talent.category]) {
-        byCategory[talent.category] = { total: 0, checked: 0 };
-      }
-      byCategory[talent.category].total++;
-      if (talent.checked) {
-        byCategory[talent.category].checked++;
-      }
-    });
 
     return {
       total,
       checked,
-      completionRate: total > 0 ? Math.round((checked / total) * 100) : 0,
-      byCategory
+      completionRate: total > 0 ? Math.round((checked / total) * 100) : 0
     };
   }, [talents]);
 
@@ -59,15 +46,12 @@ export function TalentProvider({ children }: { children: ReactNode }) {
     return talents.filter(talent => {
       if (!filters.showChecked && talent.checked) return false;
       if (!filters.showUnchecked && !talent.checked) return false;
-      if (filters.category && talent.category !== filters.category) return false;
-      if (filters.priority && talent.priority !== filters.priority) return false;
       if (filters.searchQuery) {
         const query = filters.searchQuery.toLowerCase();
         return (
           talent.talent.toLowerCase().includes(query) ||
           talent.strength.toLowerCase().includes(query) ||
-          talent.shortcoming.toLowerCase().includes(query) ||
-          talent.category.toLowerCase().includes(query)
+          talent.shortcoming.toLowerCase().includes(query)
         );
       }
       return true;

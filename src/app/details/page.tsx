@@ -52,13 +52,21 @@ export default function Home() {
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-gray-900">あなたの才能</h1>
-            <Link 
-              href="/" 
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
-            >
-              チェックに戻る
-            </Link>
+            <h1 className="text-xl font-bold text-gray-900">才能詳細</h1>
+            <div className="flex space-x-3">
+              <Link 
+                href="/" 
+                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              >
+                チェック
+              </Link>
+              <Link 
+                href="/stats" 
+                className="text-green-600 hover:text-green-700 text-sm font-medium"
+              >
+                集計 →
+              </Link>
+            </div>
           </div>
           
 

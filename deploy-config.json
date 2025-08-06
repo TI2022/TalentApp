@@ -1,0 +1,66 @@
+{
+  "projectName": "talent-discovery-app",
+  "description": "才能発見PWAアプリのデプロイ設定",
+  "environments": {
+    "production": {
+      "s3Bucket": "talent-app-production-bucket",
+      "cloudfrontDistributionId": "E1234567890ABC",
+      "domain": "talent-app.example.com",
+      "awsRegion": "ap-northeast-1",
+      "certificateArn": "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+    },
+    "staging": {
+      "s3Bucket": "talent-app-staging-bucket",
+      "cloudfrontDistributionId": "E0987654321XYZ",
+      "domain": "staging.talent-app.example.com",
+      "awsRegion": "ap-northeast-1",
+      "certificateArn": "arn:aws:acm:us-east-1:123456789012:certificate/87654321-4321-4321-4321-210987654321"
+    }
+  },
+  "s3Configuration": {
+    "indexDocument": "index.html",
+    "errorDocument": "404.html",
+    "publicReadPolicy": true,
+    "corsConfiguration": {
+      "allowedOrigins": ["*"],
+      "allowedMethods": ["GET", "HEAD"],
+      "allowedHeaders": ["*"],
+      "maxAgeSeconds": 3600
+    }
+  },
+  "cloudfrontConfiguration": {
+    "priceClass": "PriceClass_100",
+    "defaultCacheBehavior": {
+      "targetOriginId": "S3Origin",
+      "viewerProtocolPolicy": "redirect-to-https",
+      "cachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+      "compress": true
+    },
+    "customErrorResponses": [
+      {
+        "errorCode": 404,
+        "responseCode": 200,
+        "responsePage": "/index.html",
+        "errorCachingMinTtl": 300
+      },
+      {
+        "errorCode": 403,
+        "responseCode": 200,
+        "responsePage": "/index.html",
+        "errorCachingMinTtl": 300
+      }
+    ],
+    "geoRestriction": {
+      "restrictionType": "none"
+    }
+  },
+  "buildConfiguration": {
+    "nodeVersion": "18.x",
+    "buildCommand": "npm run build",
+    "outputDirectory": "out",
+    "environmentVariables": {
+      "NODE_ENV": "production",
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
+  }
+}

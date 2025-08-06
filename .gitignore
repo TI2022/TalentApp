@@ -26,6 +26,16 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env.production
+.env.staging
+
+# AWS and deployment
+.aws/
+terraform.tfvars
+terraform.tfstate*
+.terraform/
+*.tfplan
+deploy-config.local.json
 
 # vercel
 .vercel

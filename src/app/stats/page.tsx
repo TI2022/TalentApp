@@ -51,6 +51,28 @@ export default function StatsPage() {
     setRecentCurrentPage(1);
   };
 
+  // 才能をCSVエクスポートする関数
+  const exportTalents = () => {
+    if (!detailedStats) return;
+    
+    const checkedTalents = detailedStats.checkedTalents;
+    const csvHeader = '番号,才能,強み,生成日時\n';
+    const csvContent = checkedTalents.map((talent, index) => 
+      `${index + 1},"${talent.talent}","${talent.strength}","${new Date().toLocaleString('ja-JP')}"`
+    ).join('\n');
+    
+    const content = csvHeader + csvContent;
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `発見した才能_${new Date().toLocaleDateString('ja-JP')}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -117,6 +139,21 @@ export default function StatsPage() {
           </div>
         </div>
 
+
+        {/* エクスポートボタン */}
+        {detailedStats.checkedTalents.length > 0 && (
+          <div className="text-center mb-8">
+            <button
+              onClick={exportTalents}
+              className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl hover:from-orange-600 hover:to-red-600 transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-3 mx-auto border-2 border-orange-300"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span className="text-lg font-bold">才能をCSVエクスポート</span>
+            </button>
+          </div>
+        )}
 
         {/* 最近チェックした項目 */}
         {detailedStats.recentActivity.length > 0 && (

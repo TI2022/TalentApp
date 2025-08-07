@@ -14,7 +14,7 @@ export default function Home() {
 
   // ページネーション状態
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // ページネーション用のデータ計算
   const paginatedTalents = useMemo(() => {
@@ -22,6 +22,12 @@ export default function Home() {
     const endIndex = startIndex + itemsPerPage;
     return talents.slice(startIndex, endIndex);
   }, [talents, currentPage, itemsPerPage]);
+
+  // 表示件数変更ハンドラー
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  };
 
   const totalPages = Math.ceil(talents.length / itemsPerPage);
 
@@ -40,46 +46,43 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-3">
             <h1 className="text-xl font-bold text-gray-900">才能チェック</h1>
-            <div className="flex space-x-3">
+            <div className="flex space-x-2">
               <Link 
                 href="/details" 
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                className="px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm font-medium rounded-md transition-colors"
               >
-                詳細表示
+                詳細画面
               </Link>
               <Link 
                 href="/stats" 
-                className="text-green-600 hover:text-green-700 text-sm font-medium"
+                className="px-3 py-1.5 bg-green-100 text-green-700 hover:bg-green-200 text-sm font-medium rounded-md transition-colors"
               >
-                集計 →
+                集計画面
               </Link>
             </div>
           </div>
           
-          {/* コンパクトな進捗表示 */}
-          <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-3 text-white">
-            <div className="flex items-center justify-between text-sm">
-              <span>進捗: {stats.completionRate}%</span>
-              <span>{stats.checked} / {stats.total}</span>
-            </div>
-            <div className="mt-2 bg-blue-400 rounded-full h-1.5">
-              <div 
-                className="bg-white rounded-full h-1.5 transition-all duration-300"
-                style={{ width: `${stats.completionRate}%` }}
-              ></div>
-            </div>
-          </div>
         </div>
       </header>
 
       {/* チェックリスト */}
       <main className="max-w-4xl mx-auto px-4 py-4 pb-24">
-        {/* ページ情報 */}
-        <div className="flex justify-between items-center mb-4 text-sm text-gray-600">
-          <span>
-            {talents.length}件中 {((currentPage - 1) * itemsPerPage) + 1}〜{Math.min(currentPage * itemsPerPage, talents.length)}件を表示
-          </span>
-          <span>ページ {currentPage} / {totalPages}</span>
+        {/* 表示件数選択 */}
+        <div className="flex justify-end items-center mb-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600">表示件数:</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
+              className="text-sm border border-gray-300 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value={10}>10件</option>
+              <option value={20}>20件</option>
+              <option value={50}>50件</option>
+              <option value={100}>100件</option>
+              <option value={200}>200件</option>
+            </select>
+          </div>
         </div>
         
         <div className="space-y-2">
@@ -131,17 +134,6 @@ export default function Home() {
               </label>
             </div>
           ))}
-        </div>
-
-        {/* フッター */}
-        <div className="mt-8 text-center text-gray-500 text-sm">
-          <p>チェックした項目は自動保存されます</p>
-          <Link 
-            href="/details" 
-            className="inline-block mt-2 text-blue-600 hover:text-blue-700 font-medium"
-          >
-            詳細表示で才能と強みを確認 →
-          </Link>
         </div>
       </main>
 

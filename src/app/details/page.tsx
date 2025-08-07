@@ -2,7 +2,7 @@
 
 import { useTalents } from '@/contexts/TalentContext';
 import Link from 'next/link';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 export default function Home() {
   const { 
@@ -16,7 +16,7 @@ export default function Home() {
 
   // ページネーション状態
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // ページネーション計算
   const paginatedTalents = useMemo(() => {
@@ -27,6 +27,11 @@ export default function Home() {
 
   const totalPages = Math.ceil(filteredTalents.length / itemsPerPage);
 
+  // 初期状態をチェック済みのみに設定
+  useEffect(() => {
+    setFilters({ showChecked: true, showUnchecked: false });
+  }, [setFilters]);
+
   const handleFilterToggle = () => {
     setCurrentPage(1); // フィルター変更時にページをリセット
     if (filters.showChecked && filters.showUnchecked) {
@@ -36,6 +41,12 @@ export default function Home() {
       // チェック済みのみ → 全表示
       setFilters({ showChecked: true, showUnchecked: true });
     }
+  };
+
+  // 表示件数変更ハンドラー
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
   };
 
   if (loading) {
@@ -53,18 +64,18 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-xl font-bold text-gray-900">才能詳細</h1>
-            <div className="flex space-x-3">
+            <div className="flex space-x-2">
               <Link 
                 href="/" 
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                className="px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm font-medium rounded-md transition-colors"
               >
-                チェック
+                チェック画面
               </Link>
               <Link 
                 href="/stats" 
-                className="text-green-600 hover:text-green-700 text-sm font-medium"
+                className="px-3 py-1.5 bg-green-100 text-green-700 hover:bg-green-200 text-sm font-medium rounded-md transition-colors"
               >
-                集計 →
+                集計画面
               </Link>
             </div>
           </div>
@@ -73,23 +84,6 @@ export default function Home() {
 
 
 
-          {/* フィルターボタン */}
-          <div className="flex">
-            <button
-              onClick={handleFilterToggle}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 flex items-center gap-2 transform hover:scale-105 active:scale-95 ${
-                filters.showChecked && filters.showUnchecked
-                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  : 'bg-green-500 text-white hover:bg-green-600 shadow-lg'
-              }`}
-            >
-              {filters.showChecked && filters.showUnchecked ? (
-                <><span>📋</span> すべて表示中</>
-              ) : (
-                <><span>✅</span> チェック済みのみ</>
-              )}
-            </button>
-          </div>
         </div>
       </header>
 
@@ -103,12 +97,47 @@ export default function Home() {
           </div>
         ) : (
           <>
-            {/* ページ情報 */}
-            <div className="flex justify-between items-center mb-4 text-sm text-gray-600">
-              <span>
-                {filteredTalents.length}件中 {((currentPage - 1) * itemsPerPage) + 1}〜{Math.min(currentPage * itemsPerPage, filteredTalents.length)}件を表示
-              </span>
-              <span>ページ {currentPage} / {totalPages}</span>
+            {/* フィルターと表示件数選択 */}
+            <div className="flex justify-between items-center mb-4">
+              {/* セグメントスイッチ */}
+              <div className="inline-flex bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={handleFilterToggle}
+                  className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all ${
+                    filters.showChecked && filters.showUnchecked
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  すべて表示
+                </button>
+                <button
+                  onClick={handleFilterToggle}
+                  className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all ${
+                    filters.showChecked && !filters.showUnchecked
+                      ? 'bg-green-500 text-white shadow-sm'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  チェック済
+                </button>
+              </div>
+              
+              {/* 表示件数選択 */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">表示件数:</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
+                  className="text-sm border border-gray-300 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value={10}>10件</option>
+                  <option value={20}>20件</option>
+                  <option value={50}>50件</option>
+                  <option value={100}>100件</option>
+                  <option value={200}>200件</option>
+                </select>
+              </div>
             </div>
             
             <div className="space-y-4">

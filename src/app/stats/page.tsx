@@ -9,7 +9,13 @@ export default function StatsPage() {
 
   // 最近発見した才能のページネーション状態
   const [recentCurrentPage, setRecentCurrentPage] = useState(1);
-  const [recentItemsPerPage, setRecentItemsPerPage] = useState(5);
+  const [recentItemsPerPage, setRecentItemsPerPage] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('statsPage_itemsPerPage');
+      return saved ? parseInt(saved, 10) : 5;
+    }
+    return 5;
+  });
 
   // 詳細統計の計算
   const detailedStats = useMemo(() => {
@@ -49,6 +55,9 @@ export default function StatsPage() {
   const handleRecentItemsPerPageChange = (newItemsPerPage: number) => {
     setRecentItemsPerPage(newItemsPerPage);
     setRecentCurrentPage(1);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('statsPage_itemsPerPage', newItemsPerPage.toString());
+    }
   };
 
   // 才能をCSVエクスポートする関数
@@ -97,19 +106,27 @@ export default function StatsPage() {
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-3">
-            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">集計</h1>
-            <div className="flex space-x-2">
+            <h1 className="text-lg sm:text-2xl font-extrabold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">⚡ 集計</h1>
+            <div className="flex space-x-2 sm:space-x-3">
               <Link 
                 href="/" 
-                className="px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm font-medium rounded-md transition-colors"
+                className="group flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full hover:from-blue-600 hover:to-purple-600 text-xs sm:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
               >
-                チェック画面
+                <svg className="w-3 sm:w-4 h-3 sm:h-4 group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="hidden sm:inline">チェック画面</span>
+                <span className="sm:hidden">チェック</span>
               </Link>
               <Link 
                 href="/details" 
-                className="px-3 py-1.5 bg-green-100 text-green-700 hover:bg-blue-200 text-sm font-medium rounded-md transition-colors"
+                className="group flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full hover:from-green-600 hover:to-emerald-600 text-xs sm:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
               >
-                詳細画面
+                <svg className="w-3 sm:w-4 h-3 sm:h-4 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span className="hidden sm:inline">詳細画面</span>
+                <span className="sm:hidden">詳細</span>
               </Link>
             </div>
           </div>
@@ -168,7 +185,6 @@ export default function StatsPage() {
                   onChange={(e) => handleRecentItemsPerPageChange(Number(e.target.value))}
                   className="text-sm border border-gray-300 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value={5}>5件</option>
                   <option value={10}>10件</option>
                   <option value={20}>20件</option>
                   <option value={50}>50件</option>

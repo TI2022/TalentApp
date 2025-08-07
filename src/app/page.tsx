@@ -14,7 +14,13 @@ export default function Home() {
 
   // ページネーション状態
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('checkPage_itemsPerPage');
+      return saved ? parseInt(saved, 10) : 10;
+    }
+    return 10;
+  });
 
   // チュートリアル表示状態
   const [showTutorial, setShowTutorial] = useState(false);
@@ -30,6 +36,9 @@ export default function Home() {
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
     setItemsPerPage(newItemsPerPage);
     setCurrentPage(1);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('checkPage_itemsPerPage', newItemsPerPage.toString());
+    }
   };
 
   const totalPages = Math.ceil(talents.length / itemsPerPage);
@@ -85,19 +94,27 @@ export default function Home() {
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-3">
-            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">才能チェック</h1>
-            <div className="flex space-x-2">
+            <h1 className="text-lg sm:text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">✨ 才能チェック</h1>
+            <div className="flex space-x-2 sm:space-x-3">
               <Link 
                 href="/details" 
-                className="px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm font-medium rounded-md transition-colors"
+                className="group flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full hover:from-green-600 hover:to-emerald-600 text-xs sm:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
               >
-                詳細画面
+                <svg className="w-3 sm:w-4 h-3 sm:h-4 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span className="hidden sm:inline">詳細画面</span>
+                <span className="sm:hidden">詳細</span>
               </Link>
               <Link 
                 href="/stats" 
-                className="px-3 py-1.5 bg-green-100 text-green-700 hover:bg-green-200 text-sm font-medium rounded-md transition-colors"
+                className="group flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full hover:from-orange-600 hover:to-red-600 text-xs sm:text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
               >
-                集計画面
+                <svg className="w-3 sm:w-4 h-3 sm:h-4 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <span className="hidden sm:inline">集計画面</span>
+                <span className="sm:hidden">集計</span>
               </Link>
             </div>
           </div>
@@ -108,9 +125,14 @@ export default function Home() {
       {/* チェックリスト */}
       <main className="max-w-4xl mx-auto px-4 py-4 pb-24">
         {/* 表示件数選択 */}
-        <div className="flex justify-end items-center mb-4">
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center">
+            <span className="text-sm border border-blue-300 bg-blue-50 rounded-md px-3 py-1.5 text-blue-700 font-semibold">
+              👇️ 当てはまる項目をチェック
+            </span>
+          </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">表示件数:</span>
+            <span className="text-sm text-gray-600">表示件数</span>
             <select
               value={itemsPerPage}
               onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}

@@ -2,7 +2,7 @@
 
 import { useTalents } from '@/contexts/TalentContext';
 import Link from 'next/link';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 export default function Home() {
   const { 
@@ -15,6 +15,9 @@ export default function Home() {
   // ページネーション状態
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  // チュートリアル表示状態
+  const [showTutorial, setShowTutorial] = useState(false);
 
   // ページネーション用のデータ計算
   const paginatedTalents = useMemo(() => {
@@ -31,6 +34,20 @@ export default function Home() {
 
   const totalPages = Math.ceil(talents.length / itemsPerPage);
 
+  // チュートリアル初期化
+  useEffect(() => {
+    const hasSeenTutorial = localStorage.getItem('hasSeenTutorial');
+    if (!hasSeenTutorial && !loading) {
+      setShowTutorial(true);
+    }
+  }, [loading]);
+
+  // チュートリアルを閉じる
+  const closeTutorial = () => {
+    setShowTutorial(false);
+    localStorage.setItem('hasSeenTutorial', 'true');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -41,11 +58,34 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* チュートリアルモーダル */}
+      {showTutorial && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl border-4 border-gray-200 ring-4 ring-blue-100">
+            <div className="text-center">
+              <div className="mb-4">
+                <span className="text-4xl">🎯</span>
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">使い方ガイド</h2>
+              <p className="text-gray-700 text-sm leading-relaxed mb-6">
+                当てはまる項目にチェックを入れてください。<br />
+                あなたの才能については<span className="font-semibold text-green-600">詳細画面</span>と<span className="font-semibold text-orange-600">集計画面</span>で確認できます。
+              </p>
+              <button
+                onClick={closeTutorial}
+                className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
+              >
+                始める ✨
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* ヘッダー */}
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-3">
-            <h1 className="text-xl font-bold text-gray-900">才能チェック</h1>
+            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">才能チェック</h1>
             <div className="flex space-x-2">
               <Link 
                 href="/details" 

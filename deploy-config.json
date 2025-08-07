@@ -3,16 +3,16 @@
   "description": "才能発見PWAアプリのデプロイ設定",
   "environments": {
     "production": {
-      "s3Bucket": "talent-app-production-bucket",
-      "cloudfrontDistributionId": "E1234567890ABC",
-      "domain": "talent-app.example.com",
+      "s3Bucket": "talent-discovery-app-production-4cddceca",
+      "cloudfrontDistributionId": "E5BS1GPKAVVQK",
+      "domain": "d2a4ewrtayyy1w.cloudfront.net",
       "awsRegion": "ap-northeast-1",
       "certificateArn": "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
     },
     "staging": {
-      "s3Bucket": "talent-app-staging-bucket",
-      "cloudfrontDistributionId": "E0987654321XYZ",
-      "domain": "staging.talent-app.example.com",
+      "s3Bucket": "talent-discovery-app-production-4cddceca",
+      "cloudfrontDistributionId": "E5BS1GPKAVVQK",
+      "domain": "d2a4ewrtayyy1w.cloudfront.net",
       "awsRegion": "ap-northeast-1",
       "certificateArn": "arn:aws:acm:us-east-1:123456789012:certificate/87654321-4321-4321-4321-210987654321"
     }

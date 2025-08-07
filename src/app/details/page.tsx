@@ -63,7 +63,7 @@ export default function Home() {
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl font-bold text-gray-900">才能詳細</h1>
+            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">才能詳細</h1>
             <div className="flex space-x-2">
               <Link 
                 href="/" 

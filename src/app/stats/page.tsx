@@ -75,7 +75,7 @@ export default function StatsPage() {
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-3">
-            <h1 className="text-xl font-bold text-gray-900">集計</h1>
+            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">集計</h1>
             <div className="flex space-x-2">
               <Link 
                 href="/" 
@@ -99,33 +99,21 @@ export default function StatsPage() {
         {/* 概要統計 */}
         <div className="grid grid-cols-3 gap-4 mb-8">
           {/* 総数 */}
-          <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-            <p className="text-xs text-gray-500">総項目数</p>
-            <div className="flex items-center">
-              <div>
-                <p className="text-xl font-bold text-gray-900">{detailedStats.total}</p>
-              </div>
-            </div>
+          <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 text-center">
+            <p className="text-xs text-gray-500 mb-2">総項目数</p>
+            <p className="text-xl font-bold text-gray-900">{detailedStats.total}</p>
           </div>
 
           {/* チェック済み */}
-          <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-            <p className="text-xs text-gray-500">チェック済</p>
-            <div className="flex items-center">
-              <div>
-                <p className="text-xl font-bold text-green-600">{detailedStats.checked}</p>
-              </div>
-            </div>
+          <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 text-center">
+            <p className="text-xs text-gray-500 mb-2">チェック済</p>
+            <p className="text-xl font-bold text-green-600">{detailedStats.checked}</p>
           </div>
 
           {/* 未チェック */}
-          <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-            <p className="text-xs text-gray-500">未チェック</p>
-            <div className="flex items-center">
-
-              <p className="text-xl font-bold text-gray-600">{detailedStats.unchecked}</p>
-
-            </div>
+          <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 text-center">
+            <p className="text-xs text-gray-500 mb-2">未チェック</p>
+            <p className="text-xl font-bold text-gray-600">{detailedStats.unchecked}</p>
           </div>
         </div>
 
@@ -155,11 +143,6 @@ export default function StatsPage() {
             <div className="space-y-3">
               {paginatedRecentActivity.map((talent) => (
                 <div key={talent.id} className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border border-green-200">
-                  <div className="flex-shrink-0">
-                    <span className="text-xs text-green-600 bg-green-200 px-2 py-1 rounded-full">
-                      {talent.id}
-                    </span>
-                  </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-blue-600 mt-1">才能: {talent.talent}</p>
                     <p className="text-sm text-red-600">強み: {talent.strength}</p>

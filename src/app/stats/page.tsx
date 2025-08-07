@@ -134,7 +134,7 @@ export default function StatsPage() {
         {detailedStats.recentActivity.length > 0 && (
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">最近発見した才能</h2>
+              <h2 className="text-lg font-semibold text-gray-900">発見した才能</h2>
               {/* 表示件数選択 */}
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-600">表示件数:</span>
@@ -143,10 +143,11 @@ export default function StatsPage() {
                   onChange={(e) => handleRecentItemsPerPageChange(Number(e.target.value))}
                   className="text-sm border border-gray-300 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value={3}>3件</option>
                   <option value={5}>5件</option>
                   <option value={10}>10件</option>
                   <option value={20}>20件</option>
+                  <option value={50}>50件</option>
+                  <option value={100}>100件</option>
                 </select>
               </div>
             </div>
@@ -154,20 +155,14 @@ export default function StatsPage() {
             <div className="space-y-3">
               {paginatedRecentActivity.map((talent) => (
                 <div key={talent.id} className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border border-green-200">
-                  <div className="flex-shrink-0 mt-1">
-                    <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-green-800">{talent.shortcoming}</p>
-                    <p className="text-sm text-green-600 mt-1">才能: {talent.talent}</p>
-                    <p className="text-sm text-green-600">強み: {talent.strength}</p>
-                  </div>
                   <div className="flex-shrink-0">
                     <span className="text-xs text-green-600 bg-green-200 px-2 py-1 rounded-full">
-                      #{talent.id}
+                      {talent.id}
                     </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-blue-600 mt-1">才能: {talent.talent}</p>
+                    <p className="text-sm text-red-600">強み: {talent.strength}</p>
                   </div>
                 </div>
               ))}

@@ -395,8 +395,8 @@ export const initialTalents: TalentItem[] = [
   },
   {
     "id": 57,
-    "shortcoming": "質問の回答から脱線していることに",
-    "talent": "気づかない 相手の質問にていねいに答える",
+    "shortcoming": "質問の回答から脱線していることに気づかない",
+    "talent": "相手の質問にていねいに答える",
     "strength": "相手に納得感を与える",
     "checked": false
   },

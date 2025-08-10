@@ -55,32 +55,6 @@ export interface ActionRecommendation {
   priority: 'high' | 'medium' | 'low';
 }
 
-export interface OpenAIKeyword {
-  word: string;
-  importance: number;
-  category: string;
-}
-
-export interface OpenAISentiment {
-  overall: number; // -1 to 1
-  confidence: number; // 0 to 1
-  description: string;
-}
-
-export interface OpenAIInsight {
-  category: string;
-  insight: string;
-  confidence: number;
-}
-
-export interface AIAnalysisResult {
-  keywords: OpenAIKeyword[];
-  sentiment: OpenAISentiment;
-  insights: OpenAIInsight[];
-  enhancedPersonalityProfile: PersonalityProfile;
-  aiRecommendations: ActionRecommendation[];
-  summary: string;
-}
 
 export interface TalentAnalysisResult {
   keywordAnalysis: {
@@ -93,5 +67,4 @@ export interface TalentAnalysisResult {
   recommendations: ActionRecommendation[];
   totalAnalyzed: number;
   analysisDate: Date;
-  aiAnalysis?: AIAnalysisResult;
 }

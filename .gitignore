@@ -29,6 +29,15 @@ yarn-error.log*
 .env.production
 .env.staging
 
+# Security - API keys and secrets
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+secrets/
+config/secrets.json
+
 # AWS and deployment
 .aws/
 terraform.tfvars
@@ -36,6 +45,10 @@ terraform.tfstate*
 .terraform/
 *.tfplan
 deploy-config.local.json
+
+# Logs
+logs/
+*.log
 
 # vercel
 .vercel

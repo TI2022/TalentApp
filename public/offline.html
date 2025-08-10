@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>オフライン - 才能発見アプリ</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: white;
+    }
+    
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 400px;
+    }
+    
+    .icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    
+    p {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+    
+    .retry-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      margin: 0.5rem;
+    }
+    
+    .retry-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+    
+    .offline-features {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      text-align: left;
+    }
+    
+    .offline-features h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .offline-features ul {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+    
+    .offline-features li {
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      .icon {
+        font-size: 3rem;
+      }
+      
+      h1 {
+        font-size: 1.25rem;
+      }
+      
+      p {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="icon">📱</span>
+    <h1>オフラインモード</h1>
+    <p>
+      インターネット接続がありません。<br>
+      アプリの主要機能は引き続き利用できます。
+    </p>
+    
+    <a href="/" class="retry-btn">🏠 ホーム画面へ</a>
+    <button onclick="window.location.reload()" class="retry-btn">🔄 再試行</button>
+    
+    <div class="offline-features">
+      <h3>✨ 利用可能な機能</h3>
+      <ul>
+        <li>チェックリストの確認</li>
+        <li>項目のチェック・アンチェック</li>
+        <li>進捗状況の確認</li>
+        <li>検索・フィルタリング</li>
+        <li>詳細画面の閲覧</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // オンラインになったら自動でホーム画面に戻る
+    window.addEventListener('online', function() {
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
+    });
+    
+    // Service Workerの更新チェック
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(function(registration) {
+        registration.update();
+      });
+    }
+  </script>
+</body>
+</html>
